@@ -24,6 +24,7 @@ namespace DiscordRichPresence.Utils
             "False Son",
             "Seeker",
             "Chef",
+            "CHEF",
             "Enforcer",
             "Miner",
             "Paladin",
@@ -41,24 +42,51 @@ namespace DiscordRichPresence.Utils
             "Dancer",
             "Pilot",
             "Johnny",
-            "Wyatt",
+            "Custodian",
             "Sonic",
             "Robomando",
             "Deputy",
             "Ranger",
-            "Rifter"
+            "Rifter",
+            "Cadet",
+            "Celestial War Tank",
+            "Chrono Legionnaire BETA",
+            "Chrono Legionnaire",
+            "Cyborg",
+            "Desolator",
+            "Driver",
+            "Interrogator",
+            "Match Maker",
+            "Mortician",
+            "Nucleator",
+            "Pathfinder",
+            "Pyro",
+            "Ravager",
+            "Scout",
+            "Seamstress",
+            "Sorceress",
+            "Spy",
+            "Submariner",
+            "Tesla Trooper",
+            "Wanderer",
+            "Cosmic Champion",
+            "Belmont"
         };
         
         public static List<string> StagesWithAssets = new List<string>()
         {
+            "agatevillage",
             "ancientloft",
             "arena",
             "artifactworld",
             "bazaar",
             "blackbeach",
             "blackbeach2",
+            "BulwarksHaunt_GhostWave",
+            "catacombs_DS1_Catacombs",
             "dampcavesimple",
             "drybasin",
+            "FBLScene",
             "foggyswamp",
             "forgottenhaven",
             "frozenwall",
@@ -71,7 +99,10 @@ namespace DiscordRichPresence.Utils
             "itancientloft",
             "itdampcave",
             "itfrozenwall",
+            "itgolemplains",
             "itgoolake",
+            "itmoon",
+            "itskymeadow",
             "lakes",
             "lakesnight",
             "lemuriantemple",
@@ -83,6 +114,7 @@ namespace DiscordRichPresence.Utils
             "shipgraveyard",
             "skymeadow",
             "slumberingsatellite",
+            "sm64_bbf_SM64_BBF",
             "snowyforest",
             "sulfurpods",
             "village",
@@ -119,6 +151,11 @@ namespace DiscordRichPresence.Utils
             if (name == "CHEF") // gnome chef 
             {
                 return "Chef";
+            }
+
+            if (name == "Chrono Legionnaire BETA")
+            {
+                return "chronolegionnaire";
             }
             if (CharactersWithAssets.Contains(name))
             {
