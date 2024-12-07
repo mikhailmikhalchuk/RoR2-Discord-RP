@@ -116,7 +116,7 @@ namespace DiscordRichPresence.Utils
             "slumberingsatellite",
             "sm64_bbf_SM64_BBF",
             "snowyforest",
-            "sulfurpods",
+            "sulfurpools",
             "village",
             "villagenight",
             "voidraid",
