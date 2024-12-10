@@ -94,7 +94,7 @@ namespace DiscordRichPresence.Utils
                 {
                     richPresence.Details = "Fighting " + CurrentBoss + " | " + currentDifficultyString;
                 }
-                else if (PluginConfig.TeleporterStatusEntry.Value == PluginConfig.TeleporterStatus.Charge && CurrentChargeLevel > 0)
+                else if (PluginConfig.TeleporterStatusEntry.Value == PluginConfig.TeleporterStatus.Charge && CurrentChargeLevel > 0 && !Mathf.Approximately(CurrentChargeLevel, 1))
                 {
                     richPresence.Details = "Charging teleporter (" + CurrentChargeLevel * 100 + "%) | " + currentDifficultyString;
                 }
