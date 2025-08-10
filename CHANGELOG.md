@@ -1,3 +1,35 @@
+### 1.3.4 ###
+- Update by icebro/bread 
+- Changed how stage and survivor icons were obtained internally to use name tokens instead of body names (this should fix issues relating to playing in different languages!)
+- Added support for Snowtime Stages
+- Added support for Raindrop Lobotomy 
+- Added support for Videogame Mod 2 Unofficial (SSU chirr and nemmando should have proper icons now)
+- Added support for Dante
+- Added support for Banshee
+- Fixed Infernal Eclipse showing style tags in status
+- Commented out activity updated logs 
+
+### 1.3.3 ###
+- Quick fix to prevent settings nre spam and missing Risk of Options tab when ROO 2.8.4 was installed alongside Discord RPC (Discord RPC was including ROO as a dll alongside the mod instead of a dependency; oops!)
+
+### 1.3.2 ###
+- Update by icebro/bread
+- Added VOL-T support 
+- Fixed the mod crashing the game if you didn't have discord open (oops)
+
+### 1.3.1 ###
+- Fixed misc. issues and added survivor icons
+
+### 1.3.0 ###
+- Update by icebro/bread & Phreel
+- Fixed survivor icons for both SOTS Chef and Gnome's Chef
+- Fixed survivor icon for Custodian
+- Added survivor icons for Belmont, Cadet, Celestial War Tank, Chrono Legionnaire, Cosmic Champion, Cyborg, Desolator, Driver, Interrogator, Match Maker, Mortician, Nucleator, Pathfinder, Pyro, Ravager, Scout, Seamstress, Sorceress, Spy, Submariner, Tesla Trooper and Wanderer
+- Added stage icons for A Moment Haunted, Fogbound Lagoon, Remote Village, Catacombs, Simulacrum Titanic Plains, Simulacrum Sky Meadow, Simulacrum Commencement, Sundered Grove (this should've been included a long time ago whoops) and Bobomb Battlefield
+- Added moon pillar charging indicator to rich presence (it now tracks how many pillars you have charged)
+- Silenced majority of debug logging
+- Discord game lobbies are still not functional
+
 ### 1.2.3 ###
 - Update by icebro/bread 🥺
 - Fully fixed to work with Seekers of the Storm

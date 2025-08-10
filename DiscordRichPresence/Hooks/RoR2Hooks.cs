@@ -30,7 +30,7 @@ namespace DiscordRichPresence.Hooks
             var activityManager = Client.GetActivityManager();
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
             PresenceUtils.SetStagePresence(Client, richPresence, CurrentScene, Run.instance);
         }
@@ -43,17 +43,36 @@ namespace DiscordRichPresence.Hooks
                 return;
             }
 
-            //LoggerEXT.LogInfo("LocalBodyBaseName: " + localBody.baseNameToken); //!!!USE THIS!!!
-            //LoggerEXT.LogInfo("LocalBodyBaseName: " + InfoTextUtils.GetCharacterInternalName(localBody.GetDisplayName())); //for testing :3 
+            var survivorname = InfoTextUtils.GetCharacterInternalName(localBody.baseNameToken);
+            if (survivorname == "unknown") //fallback
+            {
+                if (InfoTextUtils.CharactersWithAssets.Contains(localBody.GetDisplayName().ToLower().Replace(" ", "")))
+                {
+                    survivorname = InfoTextUtils.GetCharacterInternalName(localBody.GetDisplayName().ToLower().Replace(" ", ""));
+                }
+                else
+                {
+                    //basically the easiest way to grab all the survivor icons is through the survivor catalog, then pull the names/icons through the survivor defs
+                    // butttttttttt,, they can be mismatched from the localbody name that discord rpc uses (ss2 looking at u ,..,., 
+                    //so as a last ditch we try grabbing it from the survivor def in case theres some mismatches in the repo (can happen when doing alot of them in batch
+                    var survdefname = SurvivorCatalog.GetSurvivorDef(SurvivorCatalog.GetSurvivorIndexFromBodyIndex(localBody.bodyIndex))?.displayNameToken;
+                    if (survdefname != null && InfoTextUtils.CharactersWithAssets.Contains(survdefname))
+                    {
+                        survivorname = InfoTextUtils.GetCharacterInternalName(survdefname);
+                    }
+                }
+            } 
+            //LoggerEXT.LogInfo($"nametoken :{localBody.baseNameToken} !!! found {survivorname} ,.."); //!!!USE THIS!!!
             
             var richPresence = RichPresence;
-            richPresence.Assets.SmallImage = "https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/Characters/" + InfoTextUtils.GetCharacterInternalName(localBody.GetDisplayName()) + ".png";
+            richPresence.Assets.SmallImage = $"https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/Characters/{survivorname}.png";
             richPresence.Assets.SmallText = localBody.GetDisplayName();
             var activityManager = Client.GetActivityManager();
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
+            //LoggerEXT.LogInfo(richPresence.Assets.SmallImage);
             PresenceUtils.SetStagePresence(Client, richPresence, CurrentScene, Run.instance);
         }
 
@@ -160,7 +179,7 @@ namespace DiscordRichPresence.Hooks
             
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
             
             RichPresence = richPresence;

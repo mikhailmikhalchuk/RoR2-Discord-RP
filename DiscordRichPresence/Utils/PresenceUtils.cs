@@ -1,6 +1,7 @@
 ﻿using Discord;
 using RoR2;
 using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using static DiscordRichPresence.DiscordRichPresencePlugin;
 
@@ -19,56 +20,29 @@ namespace DiscordRichPresence.Utils
                 LoggerEXT.LogError("Scene is null. Check for its null status before passing it as a parameter. Stack trace follows:");
             }
             
-            //LoggerEXT.LogInfo("baseSceneName: " + scene.baseSceneName); // uhhh yeah 
-            
-            /*
-             something like this could be used to detect if the stage has a valid image without having to update the dll (and survivors too(
-             //https://www.geeksforgeeks.org/how-to-read-data-from-website-using-c-sharp/
-             using (var client = new HttpClient()) 
-               { 
-                   var response = await client.GetAsync("https://raw.githubusercontent.com/gamrtiem/RoR2-Discord-RP/refs/heads/master/Assets/" + scene.baseSceneName + ".png"); 
+            //LoggerEXT.LogInfo("baseSceneName: " + scene.nameToken); // uhhh yeah 
 
-                   if (response.IsSuccessStatusCode) 
-                   { 
-                       var xml = await response.Content.ReadAsStringAsync(); 
-  
-                       // We can then use the LINQ to XML API to query the XML 
-                       var doc = XDocument.Parse(xml); 
-  
-                       // Let's query the XML to get all of the <title> elements 
-                       var images = from el in doc.Descendants("image") 
-                                    select el.Value; 
-                       
-                       
-                       // And finally, we'll print out the titles 
-                       foreach (var images in images) 
-                       { 
-                           Console.WriteLine(images); 
-                       } 
-                   } 
-               } 
-             */
-            if (InfoTextUtils.StagesWithAssets.Contains(scene.baseSceneName))
+            var sceneName = "riskofrain2";
+            if (InfoTextUtils.StagesWithAssets.Contains(scene.nameToken))
             {
-                richPresence.Assets.LargeImage =
-                    "https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/" +
-                    scene.baseSceneName + ".png";
-            }
-            else
+                sceneName = scene.nameToken;
+            } 
+            else if (InfoTextUtils.StagesWithAssets.Contains(scene.baseSceneName)) //fallback
             {
-                richPresence.Assets.LargeImage =
-                    "https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/riskofrain2.png";
+                sceneName = scene.baseSceneName;
             }
             
+            richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/{sceneName}.png";
             richPresence.Assets.LargeText = "DiscordRichPresence v" + Instance.Info.Metadata.Version;
 
-            richPresence.State = string.Format("Stage {0} - {1}", run.stageClearCount + 1, Language.GetString(scene.nameToken));
+            richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";
             if (run is InfiniteTowerRun infRun && infRun.waveIndex > 0)
             {
-                richPresence.State = string.Format("Wave {0} - {1}", infRun.waveIndex, Language.GetString(scene.nameToken));
+                richPresence.State = $"Wave {infRun.waveIndex} - {Language.GetString(scene.nameToken)}";
             }
 
             string currentDifficultyString = Language.GetString(DifficultyCatalog.GetDifficultyDef(run.selectedDifficulty).nameToken);
+            currentDifficultyString = Regex.Replace(currentDifficultyString, "<.*?>", string.Empty); //remove <style> tags which fixes infernal eclipse
             richPresence.Timestamps = new ActivityTimestamps(); // Clear timestamps
             richPresence.Secrets = new ActivitySecrets(); // Clear lobby join
 
@@ -77,7 +51,7 @@ namespace DiscordRichPresence.Utils
                 MoonCountdownTimer = 0;
                 richPresence.Assets.LargeImage = "moon2";
                 richPresence.Details = "Credits";
-                richPresence.State = string.Format("Stage {0} - {1}", run.stageClearCount + 1, Language.GetString(scene.nameToken));
+                richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";
             }
             else if (MoonCountdownTimer > 0)
             {
@@ -114,7 +88,8 @@ namespace DiscordRichPresence.Utils
             var activityManager = client.ActivityManagerInstance;
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //this is log heavy; no likey !
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
         }
 
@@ -142,7 +117,7 @@ namespace DiscordRichPresence.Utils
             var activityManager = client.ActivityManagerInstance;
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
         }
 
@@ -173,7 +148,7 @@ namespace DiscordRichPresence.Utils
             var activityManager = client.ActivityManagerInstance;
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
         }
 
@@ -204,7 +179,7 @@ namespace DiscordRichPresence.Utils
             var activityManager = client.ActivityManagerInstance;
             activityManager.UpdateActivity(richPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
         }
 

@@ -6,6 +6,7 @@ using DiscordRichPresence.Hooks;
 using DiscordRichPresence.Utils;
 using RoR2;
 using R2API.Utils;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // Thanks to WhelanB (to which this repository originates from)
@@ -14,7 +15,7 @@ using UnityEngine.SceneManagement;
 
 namespace DiscordRichPresence
 {
-    [BepInPlugin("com.cuno.discord", "Discord Rich Presence", "1.3.3")]
+    [BepInPlugin("com.cuno.discord", "Discord Rich Presence", "1.3.4")]
 
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
@@ -53,7 +54,7 @@ namespace DiscordRichPresence
             };
             activityManager.UpdateActivity(RichPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
         }
 
@@ -68,14 +69,19 @@ namespace DiscordRichPresence
                 LoggerEXT.LogInfo("discord is null");
             }
             
+            //use this for debugging surv and stage nametokens 
+            // if (Input.GetKeyDown(KeyCode.F2))
+            // {
+            //     foreach (var sceneDef in SceneCatalog.allStageSceneDefs)
+            //     {
+            //         LoggerEXT.LogDebug($"scene name: \"{sceneDef.baseSceneName}\", name token \"{sceneDef.nameToken}\"");
+            //     }
+            //     foreach (var survDef in SurvivorCatalog.allSurvivorDefs)
+            //     {
+            //         LoggerEXT.LogDebug($"surv name: \"{survDef.cachedName}\", name token \"{survDef.displayNameToken}\""); //these are sometimes wrong ?? looking at you ss2 ,,..,
+            //     }
+            // }
         }
-        
-        private void Start()
-        {
-            Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
-            ChangeActivity();
-        }
-        
 
         public void Awake()
         {
@@ -83,8 +89,8 @@ namespace DiscordRichPresence
             LoggerEXT = Logger;
             Logger.LogInfo("Starting Discord Rich Presence...");
             
-            //Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
-            //ChangeActivity();
+            Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
+            ChangeActivity();
             
             var activityManager = Client.GetActivityManager();
             Client.GetActivityManager();
@@ -100,7 +106,7 @@ namespace DiscordRichPresence
             RichPresence = richPresence;
             activityManager.UpdateActivity(RichPresence, (result =>
             {
-                LoggerEXT.LogInfo("activity updated, " + result);
+                //LoggerEXT.LogInfo("activity updated, " + result);
             }));
             
             Logger.LogInfo("Discord Rich Presence has started...");
