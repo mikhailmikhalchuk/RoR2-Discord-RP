@@ -1,3 +1,7 @@
+### 1.3.5 ###
+- Update by icebro/bread 
+- Added support for Alloyed Collective icons
+
 ### 1.3.4 ###
 - Update by icebro/bread 
 - Changed how stage and survivor icons were obtained internally to use name tokens instead of body names (this should fix issues relating to playing in different languages!)

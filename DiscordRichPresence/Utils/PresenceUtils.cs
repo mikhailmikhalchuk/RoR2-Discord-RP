@@ -20,7 +20,7 @@ namespace DiscordRichPresence.Utils
                 LoggerEXT.LogError("Scene is null. Check for its null status before passing it as a parameter. Stack trace follows:");
             }
             
-            //LoggerEXT.LogInfo("baseSceneName: " + scene.nameToken); // uhhh yeah 
+            LoggerEXT.LogInfo("baseSceneName: " + scene.nameToken); // uhhh yeah 
 
             var sceneName = "riskofrain2";
             if (InfoTextUtils.StagesWithAssets.Contains(scene.nameToken))
@@ -32,7 +32,7 @@ namespace DiscordRichPresence.Utils
                 sceneName = scene.baseSceneName;
             }
             
-            richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/mikhailmikhalchuk/RoR2-Discord-RP/refs/heads/master/Assets/{sceneName}.png";
+            richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/{sceneName}.png";
             richPresence.Assets.LargeText = "DiscordRichPresence v" + Instance.Info.Metadata.Version;
 
             richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";

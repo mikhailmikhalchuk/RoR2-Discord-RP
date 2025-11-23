@@ -84,6 +84,8 @@ namespace DiscordRichPresence.Utils
             "TOOLBOT_BODY_NAME",
             "TREEBOT_BODY_NAME",
             "VOIDSURVIVOR_BODY_NAME",
+            "DRIFTER_BODY_NAME",
+            "DRONETECH_BODY_NAME"
         };
         
         public static List<string> StagesWithAssets = new List<string>()
@@ -133,6 +135,14 @@ namespace DiscordRichPresence.Utils
             "MAP_VOIDRAID_TITLE",
             "MAP_VOIDSTAGE_TITLE",
             "MAP_WISPGRAVEYARD_TITLE",
+            "MAP_SOLUTIONALHAUNT_TITLE", // dlc3
+            "MAP_SOLUSWEB_NAME",
+            "MAP_REPURPOSEDCRATER_TITLE",
+            "MAP_NEST_TITLE",
+            "MAP_IRONALLUVIUM2_TITLE",
+            "MAP_IRONALLUVIUM_TITLE",
+            "MAP_CONDUITCANYON_TITLE",
+            "MAP_COMPUTATIONALEXCHANGE_TITLE",
             "SNOWTIME_MAP_BLOODGULCH_0", //snowtime
             "SNOWTIME_MAP_CITY_0",
             "SNOWTIME_MAP_DEATHISLAND_0",
