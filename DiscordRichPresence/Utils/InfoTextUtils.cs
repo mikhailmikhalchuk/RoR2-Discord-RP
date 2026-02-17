@@ -5,7 +5,7 @@ namespace DiscordRichPresence.Utils
 {
     public static class InfoTextUtils
     {
-        public static List<string> CharactersWithAssets = new List<string>()
+        public static readonly List<string> CharactersWithAssets = new List<string>()
         {
             "anarbiter",
             "unknown",
@@ -88,7 +88,7 @@ namespace DiscordRichPresence.Utils
             "DRONETECH_BODY_NAME"
         };
         
-        public static List<string> StagesWithAssets = new List<string>()
+        public static readonly List<string> StagesWithAssets = new List<string>()
         {
             //you can copy past this from a bash oneliner to get this             for file in *.png; do echo "\"${file%.png}\","; done
             "riskofrain2", //default
@@ -161,6 +161,7 @@ namespace DiscordRichPresence.Utils
             "CATACOMBS_MAP_DS1_CATACOMBS_NAME",
             "SM64_BBF_MAP_SM64_BBF_NAME",
         };
+        
         public enum StyleTag : byte
         {
             Damage = 1,
@@ -193,11 +194,11 @@ namespace DiscordRichPresence.Utils
             string tagString;
             if ((byte)styleTag >= 1 && (byte)styleTag <= 4)
             {
-                tagString = "cIs" + styleTag.ToString();
+                tagString = "cIs" + styleTag;
             }
             else
             {
-                tagString = "c" + styleTag.ToString();
+                tagString = "c" + styleTag;
             }
             return $"<style={tagString}>{content}</style>";
         }

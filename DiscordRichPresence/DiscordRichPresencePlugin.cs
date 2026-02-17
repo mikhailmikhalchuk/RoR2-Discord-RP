@@ -45,7 +45,7 @@ namespace DiscordRichPresence
 
         public static bool IsInEOSLobby => EOSLobbyManager.GetFromPlatformSystems() != null && EOSLobbyManager.GetFromPlatformSystems().isInLobby;
 
-        public static string GitAccount = "mikhailmikhalchuk";
+        public const string GitAccount = "mikhailmikhalchuk";
 
         public void ChangeActivity()
         {
@@ -140,7 +140,7 @@ namespace DiscordRichPresence
             Stage.onServerStageBegin += Stage_onServerStageBegin;
         }
 
-        public static void Dispose()
+        private static void Dispose()
         {
             //DiscordClientHooks.RemoveHooks(discord);
             PauseManagerHooks.RemoveHooks();

@@ -16,11 +16,11 @@ namespace DiscordRichPresence.Utils
         {
             FileInfo iconFile = null;
 
-            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty);
 
             FileInfo[] files = directory.GetFiles("icon.png", SearchOption.TopDirectoryOnly);
 
-            if (files != null && files.Length > 0)
+            if (files.Length > 0)
             {
                 iconFile = files[0];
             }

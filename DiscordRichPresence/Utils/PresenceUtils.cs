@@ -158,6 +158,7 @@ namespace DiscordRichPresence.Utils
             {
                 goto Party;
             }
+            
             richPresence.State = "In Lobby";
             richPresence.Details = "Preparing";
             if (details != "")

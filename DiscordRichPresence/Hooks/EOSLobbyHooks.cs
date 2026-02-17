@@ -83,7 +83,7 @@ namespace DiscordRichPresence.Hooks
 
             if (Run.instance == null)
             {
-                PresenceUtils.SetLobbyPresence(Client, RichPresence, self, (RichPresence.Details == "Choosing Character"));
+                PresenceUtils.SetLobbyPresence(Client, RichPresence, self, RichPresence.Details == "Choosing Character");
             }
             else
             {
