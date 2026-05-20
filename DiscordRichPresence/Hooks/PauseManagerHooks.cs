@@ -23,7 +23,7 @@ namespace DiscordRichPresence.Hooks
         {
             if (Run.instance != null && CurrentScene != null)
             {
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance, true);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance, true);
             }
         }
 
@@ -31,7 +31,7 @@ namespace DiscordRichPresence.Hooks
         {
             if (Run.instance != null && CurrentScene != null)
             {
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
     }

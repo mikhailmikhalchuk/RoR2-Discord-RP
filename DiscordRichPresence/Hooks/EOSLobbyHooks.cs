@@ -53,7 +53,7 @@ namespace DiscordRichPresence.Hooks
 
             LoggerEXT.LogInfo("Discord broadcasting new EOS lobby with ID " + self.CurrentLobbyId);
 
-            PresenceUtils.SetLobbyPresence(Client, RichPresence, self);
+            PresenceUtils.SetLobbyPresence(self);
         }
 
         private static void EOSLobbyManager_OnLobbyJoined(On.RoR2.EOSLobbyManager.orig_OnLobbyJoined orig, EOSLobbyManager self, ref JoinLobbyCallbackInfo data)
@@ -67,7 +67,7 @@ namespace DiscordRichPresence.Hooks
 
             LoggerEXT.LogInfo("Successfully joined EOS lobby");
 
-            PresenceUtils.SetLobbyPresence(Client, RichPresence, self);
+            PresenceUtils.SetLobbyPresence(self);
         }
 
         private static void EOSLobbyManager_OnLobbyChanged(On.RoR2.EOSLobbyManager.orig_OnLobbyChanged orig, EOSLobbyManager self)
@@ -83,12 +83,12 @@ namespace DiscordRichPresence.Hooks
 
             if (Run.instance == null)
             {
-                PresenceUtils.SetLobbyPresence(Client, RichPresence, self, RichPresence.Details == "Choosing Character");
+                PresenceUtils.SetLobbyPresence(self, RichPresence.Details == "Choosing Character");
             }
             else
             {
-                RichPresence = PresenceUtils.UpdateParty(RichPresence, self, false);
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance);
+                PresenceUtils.UpdateParty(self, false);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
 
@@ -101,7 +101,7 @@ namespace DiscordRichPresence.Hooks
                 return;
             }
 
-            PresenceUtils.SetMainMenuPresence(Client, RichPresence);
+            PresenceUtils.SetMainMenuPresence();
         }
 
         //Ensures that the game will not load hooks if the user isn't even signed into their Epic account

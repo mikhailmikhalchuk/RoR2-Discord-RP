@@ -36,7 +36,7 @@ namespace DiscordRichPresence.Hooks
 
             LoggerEXT.LogInfo("Discord broadcasting new Steam lobby with ID " + Facepunch.Steamworks.Client.Instance.Lobby.CurrentLobby);
 
-            PresenceUtils.SetLobbyPresence(Client, RichPresence, Facepunch.Steamworks.Client.Instance);
+            PresenceUtils.SetLobbyPresence(Facepunch.Steamworks.Client.Instance);
         }
 
         /*
@@ -51,7 +51,7 @@ namespace DiscordRichPresence.Hooks
 
             LoggerEXT.LogInfo("Successfully joined Steam lobby");
 
-            PresenceUtils.SetLobbyPresence(Client, RichPresence, Facepunch.Steamworks.Client.Instance);
+            PresenceUtils.SetLobbyPresence(Facepunch.Steamworks.Client.Instance);
         }
         */
         
@@ -68,12 +68,12 @@ namespace DiscordRichPresence.Hooks
 
             if (Run.instance == null)
             {
-                PresenceUtils.SetLobbyPresence(Client, RichPresence, Facepunch.Steamworks.Client.Instance, (RichPresence.Details == "Choosing Character"));
+                PresenceUtils.SetLobbyPresence(Facepunch.Steamworks.Client.Instance, (RichPresence.Details == "Choosing Character"));
             }
             else
             {
-                RichPresence = PresenceUtils.UpdateParty(RichPresence, Facepunch.Steamworks.Client.Instance, false);
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance);
+                PresenceUtils.UpdateParty(Facepunch.Steamworks.Client.Instance, false);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
 
@@ -86,7 +86,7 @@ namespace DiscordRichPresence.Hooks
                 return;
             }
 
-            PresenceUtils.SetMainMenuPresence(Client, RichPresence);
+            PresenceUtils.SetMainMenuPresence();
         }
     }
 }

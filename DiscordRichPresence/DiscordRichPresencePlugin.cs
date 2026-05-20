@@ -8,6 +8,8 @@ using RoR2;
 using R2API.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using IL.RoR2.UI.LogBook;
+using On.RoR2.UI.LogBook;
 
 // Thanks to WhelanB (to which this repository originates from)
 // and DarkKronicle (whose repository this is forked from)
@@ -15,7 +17,7 @@ using UnityEngine.SceneManagement;
 
 namespace DiscordRichPresence
 {
-    [BepInPlugin("com.cuno.discord", "Discord Rich Presence", "1.3.5")]
+    [BepInPlugin("com.cuno.discord", "Discord Rich Presence", "1.3.6")]
 
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
 
@@ -137,7 +139,14 @@ namespace DiscordRichPresence
 
             //On.RoR2.EOSLoginManager.CompleteConnectLogin += EOSLobbyHooks.EOSLoginManager_CompleteConnectLogin;
             SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+            InfiniteTowerRun.onWaveInitialized += InfiniteTowerRun_onWaveInitialized;
             Stage.onServerStageBegin += Stage_onServerStageBegin;
+        }
+
+        private static void InfiniteTowerRun_onWaveInitialized(InfiniteTowerWaveController obj)
+        {
+            PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
+            LoggerEXT.LogInfo("INFTOWER CURRENT SCENE: " + CurrentScene.baseSceneName);
         }
 
         private static void Dispose()
@@ -154,6 +163,7 @@ namespace DiscordRichPresence
 
             //On.RoR2.EOSLoginManager.CompleteConnectLogin -= EOSLobbyHooks.EOSLoginManager_CompleteConnectLogin;
             SceneManager.activeSceneChanged -= SceneManager_activeSceneChanged;
+            InfiniteTowerRun.onWaveInitialized -= InfiniteTowerRun_onWaveInitialized;
             Stage.onServerStageBegin -= Stage_onServerStageBegin;
 
             Client.Dispose();
@@ -187,30 +197,30 @@ namespace DiscordRichPresence
             switch (arg1.name)
             {
                 case "title" when Facepunch.Steamworks.Client.Instance.Lobby.IsValid:
-                    PresenceUtils.SetLobbyPresence(Client, RichPresence, Facepunch.Steamworks.Client.Instance);
+                    PresenceUtils.SetLobbyPresence(Facepunch.Steamworks.Client.Instance);
                     break;
                 case "title" when IsInEOSLobby:
-                    PresenceUtils.SetLobbyPresence(Client, RichPresence, lobbyManager);
+                    PresenceUtils.SetLobbyPresence(lobbyManager);
                     break;
                 case "lobby" when !Facepunch.Steamworks.Client.Instance.Lobby.IsValid && !IsInEOSLobby:
-                    PresenceUtils.SetMainMenuPresence(Client, RichPresence, "Choosing Character");
+                    PresenceUtils.SetMainMenuPresence("Choosing Character");
                     break;
                 case "lobby" when Facepunch.Steamworks.Client.Instance.Lobby.IsValid:
-                    PresenceUtils.SetLobbyPresence(Client, RichPresence, Facepunch.Steamworks.Client.Instance, false, "Choosing Character");
+                    PresenceUtils.SetLobbyPresence(Facepunch.Steamworks.Client.Instance, false, "Choosing Character");
                     break;
                 case "lobby" when IsInEOSLobby:
-                    PresenceUtils.SetLobbyPresence(Client, RichPresence, lobbyManager, false, "Choosing Character");
+                    PresenceUtils.SetLobbyPresence(lobbyManager, false, "Choosing Character");
                     break;
             }
 
             if (arg1.name == "logbook")
             {
-                PresenceUtils.SetMainMenuPresence(Client, RichPresence, "Reading Logbook");
+                PresenceUtils.SetMainMenuPresence("Reading Logbook");
             }
             else if (Run.instance != null && CurrentScene != null && (Facepunch.Steamworks.Client.Instance.Lobby.IsValid || IsInEOSLobby))
             {
                 LoggerEXT.LogInfo("Scene Manager Active Scene Changed Called With Value: " + (Run.instance.stageClearCount + 1));
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
 
@@ -224,7 +234,7 @@ namespace DiscordRichPresence
                 //LoggerEXT.LogInfo("Stage On Server Stage Begin Called With Value: " + obj.sceneDef.stageOrder);
                 //LoggerEXT.LogInfo("Stage On Server Stage Begin Called With Run Instance Value: " + (Run.instance.stageClearCount + 1));
                 
-                PresenceUtils.SetStagePresence(Client, RichPresence, CurrentScene, Run.instance);
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
     }
