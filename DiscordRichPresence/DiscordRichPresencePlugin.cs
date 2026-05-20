@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using IL.RoR2.UI.LogBook;
 using On.RoR2.UI.LogBook;
+using Facepunch.Steamworks;
 
 // Thanks to WhelanB (to which this repository originates from)
 // and DarkKronicle (whose repository this is forked from)
@@ -49,19 +50,6 @@ namespace DiscordRichPresence
 
         public const string GitAccount = "mikhailmikhalchuk";
 
-        public void ChangeActivity()
-        {
-            var activityManager = Client.GetActivityManager();
-            RichPresence = new Activity
-            {
-                State = "Starting game...",
-            };
-            activityManager.UpdateActivity(RichPresence, (result =>
-            {
-                //LoggerEXT.LogInfo("activity updated, " + result);
-            }));
-        }
-
         private void Update()
         {
             if (Client != null)
@@ -94,10 +82,8 @@ namespace DiscordRichPresence
             Logger.LogInfo("Starting Discord Rich Presence...");
             
             Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
-            ChangeActivity();
-            
+
             var activityManager = Client.GetActivityManager();
-            Client.GetActivityManager();
             Activity richPresence = new Activity
             {
                 State = "Starting game...",
@@ -105,7 +91,7 @@ namespace DiscordRichPresence
                 Secrets = new ActivitySecrets(),
                 Timestamps = new ActivityTimestamps()
             };
-            richPresence.Assets.LargeImage = "https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/riskofrain2.png";
+            richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/riskofrain2.png";
             richPresence.Assets.LargeText = "DiscordRichPresence v" + Instance.Info.Metadata.Version;
             RichPresence = richPresence;
             activityManager.UpdateActivity(RichPresence, (result =>
@@ -117,7 +103,7 @@ namespace DiscordRichPresence
             
             
             PluginConfig.AllowJoiningEntry = Config.Bind("Options", "Allow Joining", true, "Controls whether or not other users should be allowed to ask to join your game.");
-            PluginConfig.TeleporterStatusEntry = Config.Bind("Options", "Teleporter Status", PluginConfig.TeleporterStatus.None, "Controls whether the teleporter boss, teleporter charge status, or neither, should be shown alongside the current difficulty.");
+            PluginConfig.TeleporterStatusEntry = Config.Bind("Options", "Teleporter Status", PluginConfig.TeleporterStatus.Boss, "Controls whether the boss or charge state should be shown when the teleporter event is active.");
             PluginConfig.MainMenuIdleMessageEntry = Config.Bind("Options", "Main Menu Idle Message", "", "Allows you to choose a message to be displayed when idling in the main menu.");
 
             if (RiskOfOptionsUtils.IsEnabled)
@@ -146,7 +132,6 @@ namespace DiscordRichPresence
         private static void InfiniteTowerRun_onWaveInitialized(InfiniteTowerWaveController obj)
         {
             PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
-            LoggerEXT.LogInfo("INFTOWER CURRENT SCENE: " + CurrentScene.baseSceneName);
         }
 
         private static void Dispose()
@@ -217,6 +202,11 @@ namespace DiscordRichPresence
             {
                 PresenceUtils.SetMainMenuPresence("Reading Logbook");
             }
+            else if (arg1.name == "moon2")
+            {
+                MoonPillarsLeft = 4;
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
+            }
             else if (Run.instance != null && CurrentScene != null && (Facepunch.Steamworks.Client.Instance.Lobby.IsValid || IsInEOSLobby))
             {
                 LoggerEXT.LogInfo("Scene Manager Active Scene Changed Called With Value: " + (Run.instance.stageClearCount + 1));
@@ -229,6 +219,11 @@ namespace DiscordRichPresence
             CurrentChargeLevel = 0;
             MoonPillars = 0; // resetting it here for the sillies who have mods that let you loop past mithrix ,.,
             MoonPillarsLeft = 0;
+            if (obj.name == "moon2")
+            {
+                MoonPillarsLeft = 4;
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
+            }
             if (CurrentScene != null && Run.instance != null) // Test: Stage 1 --> 2 on 2 player MP
             {
                 //LoggerEXT.LogInfo("Stage On Server Stage Begin Called With Value: " + obj.sceneDef.stageOrder);

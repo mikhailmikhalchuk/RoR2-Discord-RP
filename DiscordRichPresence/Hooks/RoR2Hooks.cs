@@ -24,9 +24,13 @@ namespace DiscordRichPresence.Hooks
         private static void MoonBatteryMissionController_OnBatteryCharged(On.RoR2.MoonBatteryMissionController.orig_OnBatteryCharged orig, MoonBatteryMissionController self, HoldoutZoneController holdoutzone)
         {
             orig(self, holdoutzone);
+            LoggerEXT.LogInfo("BATTCHARGE!");
             MoonPillarsLeft = self.numRequiredBatteries;
             MoonPillars = self.numChargedBatteries;
-            
+
+            LoggerEXT.LogInfo("MOONPILLS: " + MoonPillars);
+            LoggerEXT.LogInfo("MOONPILLSREM: " + MoonPillarsLeft);
+
             var activityManager = Client.GetActivityManager();
             activityManager.UpdateActivity(RichPresence, (result =>
             {

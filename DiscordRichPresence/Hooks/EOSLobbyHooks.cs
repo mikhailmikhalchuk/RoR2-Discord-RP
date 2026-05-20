@@ -87,7 +87,7 @@ namespace DiscordRichPresence.Hooks
             }
             else
             {
-                PresenceUtils.UpdateParty(self, false);
+                RichPresence = PresenceUtils.UpdateParty(RichPresence, self, false);
                 PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }

@@ -32,18 +32,15 @@ namespace DiscordRichPresence.Utils
                 sceneName = scene.baseSceneName;
             }
 
-            LoggerEXT.LogInfo("sceneName var: " + sceneName);
-
             Activity richPresence = RichPresence;
             
             richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/{sceneName}.png";
             richPresence.Assets.LargeText = "DiscordRichPresence v" + Instance.Info.Metadata.Version;
 
             richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";
-            if (run is InfiniteTowerRun infRun && infRun.waveIndex > 0)
+            if (run is InfiniteTowerRun infRun)
             {
                 richPresence.State = $"Wave {infRun.waveIndex} - {Language.GetString(scene.nameToken)}";
-                richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/{scene.baseSceneName}.png";
             }
 
             string currentDifficultyString = Language.GetString(DifficultyCatalog.GetDifficultyDef(run.selectedDifficulty).nameToken);
@@ -54,7 +51,7 @@ namespace DiscordRichPresence.Utils
             if (scene.baseSceneName == "outro")
             {
                 MoonCountdownTimer = 0;
-                richPresence.Assets.LargeImage = "moon2";
+                richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/MAP_MOON_TITLE.png";
                 richPresence.Details = "Credits";
                 richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";
             }
@@ -69,18 +66,19 @@ namespace DiscordRichPresence.Utils
             else
             {
                 richPresence.Details = currentDifficultyString;
-                if (PluginConfig.TeleporterStatusEntry.Value == PluginConfig.TeleporterStatus.Boss && CurrentBoss != "")
-                {
-                    richPresence.Details = "Fighting " + CurrentBoss + " | " + currentDifficultyString;
-                }
-                else if (PluginConfig.TeleporterStatusEntry.Value == PluginConfig.TeleporterStatus.Charge && CurrentChargeLevel > 0 && !Mathf.Approximately(CurrentChargeLevel, 1))
+                if (PluginConfig.TeleporterStatusEntry.Value == PluginConfig.TeleporterStatus.Charge && CurrentChargeLevel > 0 && !Mathf.Approximately(CurrentChargeLevel, 1))
                 {
                     richPresence.Details = "Charging teleporter (" + CurrentChargeLevel * 100 + "%) | " + currentDifficultyString;
                 }
+                else if (CurrentBoss != "")
+                {
+                    richPresence.Details = "Fighting " + CurrentBoss + " | " + currentDifficultyString;
+                }
+                
 
                 if ((MoonPillars > 0 | MoonPillarsLeft > 0) && !Mathf.Approximately(MoonPillars, MoonPillarsLeft)) //idk rider wanted it like this and not moonpillars != moonpillarsleft because floating point numbers idk 
                 {
-                    richPresence.Details = "Charging pillars " + MoonPillars + "/" + MoonPillarsLeft + " | " + currentDifficultyString;
+                    richPresence.Details = "Charging pillars (" + MoonPillars + "/" + MoonPillarsLeft + ") | " + currentDifficultyString;
                 }
 
                 if (scene.sceneType == SceneType.Stage && !isPaused)
@@ -156,7 +154,7 @@ namespace DiscordRichPresence.Utils
             richPresence.Timestamps = new ActivityTimestamps(); // Clear timestamps
 
             Party:
-            UpdateParty(faceClient);
+            richPresence = UpdateParty(richPresence, faceClient);
 
             RichPresence = richPresence;
             var activityManager = Client.ActivityManagerInstance;
@@ -164,6 +162,8 @@ namespace DiscordRichPresence.Utils
             {
                 //LoggerEXT.LogInfo("activity updated, " + result);
             }));
+
+            LoggerEXT.LogInfo("PRESENCE SECRET: " + RichPresence.Secrets.Join);
         }
 
         public static void SetLobbyPresence(EOSLobbyManager lobbyManager, bool justParty = false, string details = "")
@@ -190,7 +190,7 @@ namespace DiscordRichPresence.Utils
             richPresence.Timestamps = new ActivityTimestamps(); // Clear timestamps
 
             Party:
-            UpdateParty(lobbyManager);
+            richPresence = UpdateParty(richPresence, lobbyManager);
 
             RichPresence = richPresence;
             var activityManager = Client.ActivityManagerInstance;
@@ -200,10 +200,8 @@ namespace DiscordRichPresence.Utils
             }));
         }
 
-        public static Activity UpdateParty(Facepunch.Steamworks.Client faceClient, bool includeJoinButton = true)
+        public static Activity UpdateParty(Activity richPresence, Facepunch.Steamworks.Client faceClient, bool includeJoinButton = true)
         {
-            Activity richPresence = RichPresence;
-
             richPresence.Party.Id = faceClient.Username;
             richPresence.Party.Size.CurrentSize = faceClient.Lobby.NumMembers;
             richPresence.Party.Size.MaxSize = faceClient.Lobby.MaxMembers;
@@ -213,17 +211,16 @@ namespace DiscordRichPresence.Utils
             {
                 richPresence.Secrets.Join = faceClient.Lobby.CurrentLobby.ToString();
             }
+            richPresence.Instance = true;
 
             return richPresence;
         }
 
-        public static Activity UpdateParty(EOSLobbyManager lobbyManager, bool includeJoinButton = true)
+        public static Activity UpdateParty(Activity richPresence, EOSLobbyManager lobbyManager, bool includeJoinButton = true)
         {
-            Activity richPresence = RichPresence;
-
             richPresence.Party.Id = lobbyManager.CurrentLobbyId;
-            richPresence.Party.Size.CurrentSize = lobbyManager.newestLobbyData.totalMaxPlayers;
-            richPresence.Party.Size.MaxSize = lobbyManager.newestLobbyData.totalPlayerCount;
+            richPresence.Party.Size.CurrentSize = lobbyManager.newestLobbyData.totalPlayerCount;
+            richPresence.Party.Size.MaxSize = lobbyManager.newestLobbyData.totalMaxPlayers;
 
             richPresence.Secrets = new ActivitySecrets();
             if (PluginConfig.AllowJoiningEntry.Value && includeJoinButton)

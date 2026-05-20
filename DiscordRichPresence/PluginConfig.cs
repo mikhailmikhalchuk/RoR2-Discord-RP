@@ -12,9 +12,8 @@ namespace DiscordRichPresence
 
         public enum TeleporterStatus : byte
         {
-            None = 0,
-            Boss = 1,
-            Charge = 2
+            Boss = 0,
+            Charge = 1
         }
     }
 }

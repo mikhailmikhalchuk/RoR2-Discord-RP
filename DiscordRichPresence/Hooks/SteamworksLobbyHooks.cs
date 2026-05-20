@@ -72,7 +72,7 @@ namespace DiscordRichPresence.Hooks
             }
             else
             {
-                PresenceUtils.UpdateParty(Facepunch.Steamworks.Client.Instance, false);
+                RichPresence = PresenceUtils.UpdateParty(RichPresence, Facepunch.Steamworks.Client.Instance, false);
                 PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
         }
