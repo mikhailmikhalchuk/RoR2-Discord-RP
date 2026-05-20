@@ -53,7 +53,7 @@ namespace DiscordRichPresence.Utils
                 MoonCountdownTimer = 0;
                 richPresence.Assets.LargeImage = $"https://raw.githubusercontent.com/{GitAccount}/RoR2-Discord-RP/refs/heads/master/Assets/MAP_MOON_TITLE.png";
                 richPresence.Details = "Credits";
-                richPresence.State = $"Stage {run.stageClearCount + 1} - {Language.GetString(scene.nameToken)}";
+                richPresence.State = "";
             }
             else if (MoonCountdownTimer > 0)
             {
@@ -75,10 +75,9 @@ namespace DiscordRichPresence.Utils
                     richPresence.Details = "Fighting " + CurrentBoss + " | " + currentDifficultyString;
                 }
                 
-
-                if ((MoonPillars > 0 | MoonPillarsLeft > 0) && !Mathf.Approximately(MoonPillars, MoonPillarsLeft)) //idk rider wanted it like this and not moonpillars != moonpillarsleft because floating point numbers idk 
+                if (scene.baseSceneName == "moon2" && CurrentBoss == "")
                 {
-                    richPresence.Details = "Charging pillars (" + MoonPillars + "/" + MoonPillarsLeft + ") | " + currentDifficultyString;
+                    richPresence.Details = "Charging pillars (" + MoonBatteryMissionController.instance.numChargedBatteries + "/4) | " + currentDifficultyString;
                 }
 
                 if (scene.sceneType == SceneType.Stage && !isPaused)
@@ -94,11 +93,6 @@ namespace DiscordRichPresence.Utils
                 //this is log heavy; no likey !
                 //LoggerEXT.LogInfo("activity updated, " + result);
             }));
-        }
-
-        public static void UpdateWavePresence(Discord.Discord client, Activity richPresence)
-        {
-
         }
 
         public static void SetMainMenuPresence(string details = "")
@@ -162,8 +156,6 @@ namespace DiscordRichPresence.Utils
             {
                 //LoggerEXT.LogInfo("activity updated, " + result);
             }));
-
-            LoggerEXT.LogInfo("PRESENCE SECRET: " + RichPresence.Secrets.Join);
         }
 
         public static void SetLobbyPresence(EOSLobbyManager lobbyManager, bool justParty = false, string details = "")

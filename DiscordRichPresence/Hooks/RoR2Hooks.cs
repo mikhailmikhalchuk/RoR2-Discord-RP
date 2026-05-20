@@ -19,23 +19,24 @@ namespace DiscordRichPresence.Hooks
             On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter += BaseMainMenuScreen_OnEnter;
             On.RoR2.Run.OnClientGameOver += Run_OnClientGameOver;
             On.RoR2.MoonBatteryMissionController.OnBatteryCharged += MoonBatteryMissionController_OnBatteryCharged;
+            On.RoR2.BossGroup.Start += BossGroup_Start;
+        }
+
+        private static void BossGroup_Start(On.RoR2.BossGroup.orig_Start orig, BossGroup self)
+        {
+            if (self.gameObject.name == "BrotherEncounter, Phase 2")
+            {
+                CurrentBoss = "Lunar Chimera";
+                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
+            }
+
+            orig(self);
         }
 
         private static void MoonBatteryMissionController_OnBatteryCharged(On.RoR2.MoonBatteryMissionController.orig_OnBatteryCharged orig, MoonBatteryMissionController self, HoldoutZoneController holdoutzone)
         {
             orig(self, holdoutzone);
-            LoggerEXT.LogInfo("BATTCHARGE!");
-            MoonPillarsLeft = self.numRequiredBatteries;
-            MoonPillars = self.numChargedBatteries;
 
-            LoggerEXT.LogInfo("MOONPILLS: " + MoonPillars);
-            LoggerEXT.LogInfo("MOONPILLSREM: " + MoonPillarsLeft);
-
-            var activityManager = Client.GetActivityManager();
-            activityManager.UpdateActivity(RichPresence, (result =>
-            {
-                //LoggerEXT.LogInfo("activity updated, " + result);
-            }));
             PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
         }
 
@@ -90,8 +91,9 @@ namespace DiscordRichPresence.Hooks
             On.RoR2.EscapeSequenceController.SetCountdownTime -= EscapeSequenceController_SetCountdownTime;
             On.RoR2.InfiniteTowerRun.BeginNextWave -= InfiniteTowerRun_BeginNextWave;
             On.RoR2.UI.MainMenu.BaseMainMenuScreen.OnEnter -= BaseMainMenuScreen_OnEnter;
-            On.RoR2.Run.OnClientGameOver += Run_OnClientGameOver;
-            On.RoR2.MoonBatteryMissionController.OnBatteryCharged += MoonBatteryMissionController_OnBatteryCharged;
+            On.RoR2.Run.OnClientGameOver -= Run_OnClientGameOver;
+            On.RoR2.MoonBatteryMissionController.OnBatteryCharged -= MoonBatteryMissionController_OnBatteryCharged;
+            On.RoR2.BossGroup.Start -= BossGroup_Start;
         }
 
         private static void CharacterBody_onBodyStartGlobal(CharacterBody obj)

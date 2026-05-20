@@ -37,16 +37,12 @@ namespace DiscordRichPresence
         public static SceneDef CurrentScene => SceneCatalog.GetSceneDefForCurrentScene();
         
         public static float CurrentChargeLevel { get; set; }
-        
-        public static float MoonPillars { get; set; }
-        
-        public static float MoonPillarsLeft { get; set; }
 
         public static float MoonCountdownTimer { get; set; }
 
         public static string CurrentBoss { get; set; }
 
-        public static bool IsInEOSLobby => EOSLobbyManager.GetFromPlatformSystems() != null && EOSLobbyManager.GetFromPlatformSystems().isInLobby;
+        public static bool IsInEOSLobby => EOSLobbyManager.GetFromPlatformSystems()?.isInLobby ?? false;
 
         public const string GitAccount = "mikhailmikhalchuk";
 
@@ -173,8 +169,6 @@ namespace DiscordRichPresence
 
             CurrentBoss = "";
             CurrentChargeLevel = 0;
-            MoonPillars = 0;
-            MoonPillarsLeft = 0;
             MoonCountdownTimer = 0;
 
             EOSLobbyManager lobbyManager = EOSLobbyManager.GetFromPlatformSystems();
@@ -202,11 +196,6 @@ namespace DiscordRichPresence
             {
                 PresenceUtils.SetMainMenuPresence("Reading Logbook");
             }
-            else if (arg1.name == "moon2")
-            {
-                MoonPillarsLeft = 4;
-                PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
-            }
             else if (Run.instance != null && CurrentScene != null && (Facepunch.Steamworks.Client.Instance.Lobby.IsValid || IsInEOSLobby))
             {
                 LoggerEXT.LogInfo("Scene Manager Active Scene Changed Called With Value: " + (Run.instance.stageClearCount + 1));
@@ -217,11 +206,8 @@ namespace DiscordRichPresence
         private static void Stage_onServerStageBegin(Stage obj)
         {
             CurrentChargeLevel = 0;
-            MoonPillars = 0; // resetting it here for the sillies who have mods that let you loop past mithrix ,.,
-            MoonPillarsLeft = 0;
             if (obj.name == "moon2")
             {
-                MoonPillarsLeft = 4;
                 PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
             }
             if (CurrentScene != null && Run.instance != null) // Test: Stage 1 --> 2 on 2 player MP
