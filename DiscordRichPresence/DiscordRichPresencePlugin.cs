@@ -54,7 +54,7 @@ namespace DiscordRichPresence
             }
             else
             {
-                LoggerEXT.LogInfo("discord is null");
+                // discord is null, do nothing
             }
             
             //use this for debugging surv and stage nametokens 
@@ -77,7 +77,20 @@ namespace DiscordRichPresence
             LoggerEXT = Logger;
             Logger.LogInfo("Starting Discord Rich Presence...");
             
-            Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
+            try
+            {
+                Client = new Discord.Discord(992086428240580720, (ulong)CreateFlags.NoRequireDiscord);
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogWarning($"Could not connect to Discord client (Discord is likely closed): {ex.Message}");
+                Client = null;
+            }
+
+            if (Client == null)
+            {
+                return;
+            }
 
             var activityManager = Client.GetActivityManager();
             Activity richPresence = new Activity
@@ -147,7 +160,18 @@ namespace DiscordRichPresence
             InfiniteTowerRun.onWaveInitialized -= InfiniteTowerRun_onWaveInitialized;
             Stage.onServerStageBegin -= Stage_onServerStageBegin;
 
-            Client.Dispose();
+            if (Client != null)
+            {
+                try
+                {
+                    Client.Dispose();
+                }
+                catch
+                {
+                    // ignore
+                }
+                Client = null;
+            }
         }
 
         public void OnEnable()
