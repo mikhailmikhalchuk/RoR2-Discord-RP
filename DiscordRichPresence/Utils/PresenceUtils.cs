@@ -11,6 +11,10 @@ namespace DiscordRichPresence.Utils
     {
         public static void SetStagePresence(SceneDef scene, Run run, bool isPaused = false) // Don't like this ... needs to be decluttered
         {
+            if (Client == null || PluginConfig.TeleporterStatusEntry == null)
+            {
+                return;
+            }
             if (Run.instance == null)
             {
                 LoggerEXT.LogError("Run instance is null. Check for its null status before passing it as a parameter. Stack trace follows:");
@@ -97,6 +101,10 @@ namespace DiscordRichPresence.Utils
 
         public static void SetMainMenuPresence(string details = "")
         {
+            if (Client == null || PluginConfig.MainMenuIdleMessageEntry == null)
+            {
+                return;
+            }
             Activity richPresence = RichPresence;
 
             richPresence.Assets = new ActivityAssets()
@@ -127,6 +135,10 @@ namespace DiscordRichPresence.Utils
 
         public static void SetLobbyPresence(Facepunch.Steamworks.Client faceClient, bool justParty = false, string details = "")
         {
+            if (Client == null)
+            {
+                return;
+            }
             Activity richPresence = RichPresence;
             if (justParty)
             {
@@ -160,6 +172,10 @@ namespace DiscordRichPresence.Utils
 
         public static void SetLobbyPresence(EOSLobbyManager lobbyManager, bool justParty = false, string details = "")
         {
+            if (Client == null)
+            {
+                return;
+            }
             Activity richPresence = RichPresence;
 
             if (justParty)

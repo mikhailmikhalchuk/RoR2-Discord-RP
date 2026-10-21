@@ -76,6 +76,19 @@ namespace DiscordRichPresence
             Instance = this;
             LoggerEXT = Logger;
             Logger.LogInfo("Starting Discord Rich Presence...");
+
+            PluginConfig.AllowJoiningEntry = Config.Bind("Options", "Allow Joining", true, "Controls whether or not other users should be allowed to ask to join your game.");
+            PluginConfig.TeleporterStatusEntry = Config.Bind("Options", "Teleporter Status", PluginConfig.TeleporterStatus.Boss, "Controls whether the boss or charge state should be shown when the teleporter event is active.");
+            PluginConfig.MainMenuIdleMessageEntry = Config.Bind("Options", "Main Menu Idle Message", "", "Allows you to choose a message to be displayed when idling in the main menu.");
+
+            if (RiskOfOptionsUtils.IsEnabled)
+            {
+                RiskOfOptionsUtils.AddIcon();
+                RiskOfOptionsUtils.SetModDescription("Adds Discord Rich Presence functionality to Risk of Rain 2");
+                RiskOfOptionsUtils.AddCheckBoxOption(PluginConfig.AllowJoiningEntry);
+                RiskOfOptionsUtils.AddMultiOption(PluginConfig.TeleporterStatusEntry);
+                RiskOfOptionsUtils.AddTextInputOption(PluginConfig.MainMenuIdleMessageEntry);
+            }
             
             try
             {
@@ -109,24 +122,15 @@ namespace DiscordRichPresence
             }));
             
             Logger.LogInfo("Discord Rich Presence has started...");
-            
-            
-            PluginConfig.AllowJoiningEntry = Config.Bind("Options", "Allow Joining", true, "Controls whether or not other users should be allowed to ask to join your game.");
-            PluginConfig.TeleporterStatusEntry = Config.Bind("Options", "Teleporter Status", PluginConfig.TeleporterStatus.Boss, "Controls whether the boss or charge state should be shown when the teleporter event is active.");
-            PluginConfig.MainMenuIdleMessageEntry = Config.Bind("Options", "Main Menu Idle Message", "", "Allows you to choose a message to be displayed when idling in the main menu.");
-
-            if (RiskOfOptionsUtils.IsEnabled)
-            {
-                RiskOfOptionsUtils.AddIcon();
-                RiskOfOptionsUtils.SetModDescription("Adds Discord Rich Presence functionality to Risk of Rain 2");
-                RiskOfOptionsUtils.AddCheckBoxOption(PluginConfig.AllowJoiningEntry);
-                RiskOfOptionsUtils.AddMultiOption(PluginConfig.TeleporterStatusEntry);
-                RiskOfOptionsUtils.AddTextInputOption(PluginConfig.MainMenuIdleMessageEntry);
-            }
         }
 
         private static void InitializeHooks()
         {
+            if (Client == null)
+            {
+                return;
+            }
+
             //DiscordClientHooks.AddHooks(discord);
             PauseManagerHooks.AddHooks();
             SteamworksLobbyHooks.AddHooks();
@@ -140,6 +144,11 @@ namespace DiscordRichPresence
 
         private static void InfiniteTowerRun_onWaveInitialized(InfiniteTowerWaveController obj)
         {
+            if (Client == null)
+            {
+                return;
+            }
+
             PresenceUtils.SetStagePresence(CurrentScene, Run.instance);
         }
 
@@ -229,6 +238,11 @@ namespace DiscordRichPresence
 
         private static void Stage_onServerStageBegin(Stage obj)
         {
+            if (Client == null)
+            {
+                return;
+            }
+
             CurrentChargeLevel = 0;
             if (obj.name == "moon2")
             {
